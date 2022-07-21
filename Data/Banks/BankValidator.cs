@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FluentValidation;
+
+namespace APITransferencias.Models
+{
+    public class BankValidator: AbstractValidator<Bank>
+    {
+        public BankValidator()
+        {
+            RuleFor(bank => bank.codigo_banco).NotNull().Length(8).NotEmpty().WithState(state => "400");
+            RuleFor(bank => bank.nombre_banco).NotNull().NotEmpty().MaximumLength(40).MinimumLength(5).WithErrorCode("400");
+            RuleFor(bank => bank.direccion).NotNull().NotEmpty().MaximumLength(50).WithErrorCode("400");
+        }
+    }
+}
