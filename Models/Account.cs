@@ -19,9 +19,7 @@ namespace APITransferencias.Models
  
         public double saldo { get; set; }
 
-
         public string cedula_cliente { get; set; }  
-
 
         public string cod_banco { get; set; }
         public virtual Client cedula { get; set; }

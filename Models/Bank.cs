@@ -14,13 +14,13 @@ namespace APITransferencias.Models
         public string direccion { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Account> codigo_banco_ac { get; set; }
+        public virtual ICollection<Account> codigo_banco_ac { get; set; } = new HashSet<Account>();
 
         [JsonIgnore]
-        public virtual ICollection<Transfer> codigo_banco_origen { get; set; }
+        public virtual ICollection<Transfer> codigo_banco_origen { get; set; } = new HashSet<Transfer>();
 
         [JsonIgnore]
-        public virtual ICollection<Transfer> codigo_banco_destino { get; set; }
-     
+        public virtual ICollection<Transfer> codigo_banco_destino { get; set; } = new HashSet<Transfer>();
+
     }
 }

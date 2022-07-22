@@ -10,12 +10,15 @@ namespace APITransferencias.Models
     {
         private readonly IClientRepository _clientRepository;
 
+        ClientValidator validator = new ClientValidator();
+
         APIContext context;
         public ClientsController(IClientRepository clientRepository, APIContext db)
         {
             _clientRepository = clientRepository;
             context = db;
         }
+
 
         [HttpGet]
         [Route("createDB")]
@@ -68,6 +71,16 @@ namespace APITransferencias.Models
 
             };
 
+            var validate = validator.Validate(client);
+
+            if(!validate.IsValid)
+            {
+                foreach (var error in validate.Errors)
+                {
+                    return BadRequest($"Error en el servicio: {error.ErrorMessage}. Campo: {error.PropertyName}");
+                }
+            }
+
             try
             {
 
@@ -94,6 +107,24 @@ namespace APITransferencias.Models
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var client = new Client()
+            {
+                cedula = clientParam.cedula,
+                tipo_doc = clientParam.tipo_doc,
+                nombre_apellido = clientParam.nombre_apellido,
+
+            };
+
+            var validate = validator.Validate(client);
+
+            if (!validate.IsValid)
+            {
+                foreach (var error in validate.Errors)
+                {
+                    return BadRequest($"Error en el servicio: {error.ErrorMessage}. Campo: {error.PropertyName}");
+                }
             }
 
             var newClient = await _clientRepository.updateClient(clientParam);

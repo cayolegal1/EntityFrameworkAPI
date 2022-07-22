@@ -1,125 +1,85 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using Npgsql;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Npgsql;
 
 
-//namespace APITransferencias.Models
-//{
-//    public class BankRepository : IBankRepository
-//    {
+namespace APITransferencias.Models
+{
+    public class BankRepository : IBankRepository
+    {
 
-//        protected NpgsqlConnection dbConnection()
-//        {
-//            return new NpgsqlConnection("Server = 127.0.0.1; Port = 5432; Database = interbanking_transfers; User Id = postgres; Password = hola1606;");
-//        }
+        APIContext context;
 
-//        public async Task<bool> createBank(Bank bankInfo)
-//        {
-//            var db = dbConnection();
-
-//            string query = @$"
-             
-//             INSERT INTO bancos (codigo_banco, nombre_banco, direccion)
-//             VALUES(@codigo_banco, @nombre_banco, @direccion)
-             
-//             ";
-
-//            var searchBankCode = await getBankbyCode(bankInfo.codigo_banco);
-
-//            if(searchBankCode != null)
-//            {
-//                throw new Exception("Banco ya se encuentra registrado");
-//            }
-
-//            var response = await db.ExecuteAsync(query, 
-//            new { bankInfo.nombre_banco, bankInfo.direccion, bankInfo.codigo_banco });
-
-//            return response > 0;
-//        }
+        public BankRepository(APIContext apicontext)
+        {
+            this.context = apicontext;
+        }
 
 
+        public async Task<IEnumerable<Bank>> getAllBanks()
+        {
 
-//        public async Task<bool> deleteBank(Bank bankInfo)
-//        {
-//            var db = dbConnection();
+            return context.Banks;
+        }
 
-//            string query = @"
-                
-//             DELETE FROM bancos 
-//             WHERE codigo_banco = @codigo_banco
 
-//            ";
+        //public async Task<Bank> getBankbyCode(string codigo_banco)
+        public async Task<Bank> getBankbyCode(string codigo_banco)
+        {
+            var request = context.Banks.Find(codigo_banco);
 
-//            var searchBankCode = await getBankbyCode(bankInfo.codigo_banco);
+            return request;
+        }
 
-//            if(searchBankCode == null)
-//            {
-//                throw new Exception("Banco no se encuentra registrado");
-//            }
+        public async Task<bool> createBank(Bank bankInfo)
+        {
 
-//            var response = await db.ExecuteAsync(query, new {bankInfo.codigo_banco});
+            var validation = context.Banks.Find(bankInfo.codigo_banco);
 
-//            return response > 0;
-//        }
+            if (validation != null) throw new Exception("Código de banco ya existe");
+
+            var newBank = context.Banks.Add(bankInfo);
+
+            await context.SaveChangesAsync();
+
+            return true;
+        }
 
 
 
-//        public async Task<IEnumerable<Bank>> getAllBanks()
-//        {
-//            var db = dbConnection();
-
-//            string query = @"
+        public async Task<bool> deleteBank(Bank bankInfo)
+        {
             
-//             SELECT * FROM bancos
 
-//            ";
+            var bank = context.Banks.Find(bankInfo.codigo_banco);
 
-//            return await db.QueryAsync<Bank>(query);
-//        }
+            if(bank == null)
+            {
+                throw new Exception("Banco no existe");
+            }
 
+            context.Banks.Remove(bank);
 
+            await context.SaveChangesAsync();
 
-//        public async Task<Bank> getBankbyCode(string codigo_banco)
-//        public async Task<Bank> getBankbyCode(string codigo_banco)
-//        {
-//            var db = dbConnection();
+            return true;
+        }
 
-//            var query = @$"
-            
-//             SELECT * FROM bancos WHERE codigo_banco = @codigo_banco
-            
-//            ";
+        public async Task<bool> updateBank(Bank bankInfo)
+        {
+            var bank = context.Banks.Find(bankInfo.codigo_banco);
 
+            if (bank == null) throw new Exception("Código de banco inválido o no existe");
 
-//            var response = await db.QueryFirstOrDefaultAsync<Bank>(query, new {codigo_banco});
+            bank.nombre_banco = bankInfo.nombre_banco;
+            bank.direccion = bankInfo.direccion;
 
+            await context.SaveChangesAsync();
 
-//            return response;
-//        }
-
-
-
-//        public async Task<bool> updateBank(Bank bankInfo)
-//        {
-//            //var db = dbConnection();
-
-//            //string query = @$"
-
-//            // UPDATE bancos
-//            // SET nombre_banco = @nombre_banco,
-//            // direccion = @direccion
-//            // WHERE codigo_banco = @codigo_banco
-//            // ";
-
-//            //var response = await db.ExecuteAsync(query,
-//            //new { bankInfo.nombre_banco, bankInfo.direccion, bankInfo.codigo_banco });
-
-//            //return response > 0;
-
-//            return true;
-//        }
-//    }
-//}
+            return true;
+        }
+    }
+}

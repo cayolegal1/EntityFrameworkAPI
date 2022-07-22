@@ -12,8 +12,8 @@ namespace APITransferencias.Models
         public string tipo_doc { get; set; }
 
         public string nombre_apellido { get; set; }
-
         [JsonIgnore]
-        public virtual ICollection<Account> cedula_ac { get; set; }
+        public virtual ICollection<Account> cedula_ac { get; set; } = new List<Account>();
+
     }
 }

@@ -12,8 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddNpgsql<APIContext>("User ID=postgres;Password=hola1606;Server=127.0.0.1;Port=5432;Database=entityframework;");
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
-//builder.Services.AddScoped<IBankRepository, BankRepository>();
-//builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IBankRepository, BankRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 //builder.Services.AddScoped<ITransferRepository, TransferRepository>();
 
 
