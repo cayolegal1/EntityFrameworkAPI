@@ -52,10 +52,6 @@ namespace APITransferencias.Models
 
                 client.Ignore(c => c.cedula_ac);
 
-
-
-                //insercion de datos
-                //client.HasData(data);
             });
 
             modelBuilder.Entity<Bank>(bank =>
@@ -89,6 +85,7 @@ namespace APITransferencias.Models
                 account.HasOne(a => a.cedula).WithMany(a =>  a.cedula_ac).HasForeignKey(a => a.cedula_cliente);
 
                 account.HasOne(a => a.codigo_banco).WithMany(a => a.codigo_banco_ac).HasForeignKey(a => a.cod_banco);
+
 
             });
 
