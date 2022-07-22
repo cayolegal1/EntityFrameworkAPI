@@ -48,10 +48,6 @@ namespace APITransferencias.Models
 
                 client.Property(c => c.nombre_apellido).IsRequired().HasMaxLength(50);
 
-                client.Property(c => c.cedula_ac).IsRequired(false);
-
-                client.Ignore(c => c.cedula_ac);
-
             });
 
             modelBuilder.Entity<Bank>(bank =>
@@ -86,6 +82,7 @@ namespace APITransferencias.Models
 
                 account.HasOne(a => a.codigo_banco).WithMany(a => a.codigo_banco_ac).HasForeignKey(a => a.cod_banco);
 
+     
 
             });
 

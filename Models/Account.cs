@@ -7,8 +7,8 @@ namespace APITransferencias.Models
 
     public class Account
     {
-
-        public string id_cta { get; set; }
+      
+        public Guid id_cta { get; set; } 
 
    
         public string num_cta { get; set; }
@@ -24,15 +24,16 @@ namespace APITransferencias.Models
         public string cod_banco { get; set; }
 
         [JsonIgnore]
-        public virtual Client cedula { get; set; }
+        public virtual Client? cedula { get; set; }
 
         [JsonIgnore]
-        public virtual Bank codigo_banco { get; set; }
-        
+        public virtual Bank? codigo_banco { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Transfer> numero_cta_origen { get; set; } = new List<Transfer>();
 
         [JsonIgnore]
         public virtual ICollection<Transfer> numero_cta_destino { get; set; } = new List<Transfer>();
+
     }
 }

@@ -50,19 +50,7 @@ namespace APITransferencias.Models
             try
             {
 
-                Guid myGuid = Guid.NewGuid();
-
-                var newAccount = new Account()
-                {
-                    id_cta = myGuid.ToString(),
-                    num_cta = accountInfo.num_cta,
-                    moneda = accountInfo.moneda,
-                    saldo = accountInfo.saldo,
-                    cedula_cliente = accountInfo.cedula_cliente,
-                    cod_banco = accountInfo.cod_banco,
-                };
-
-                var newClient = await _accountRepository.createAccount(newAccount);
+                var newClient = await _accountRepository.createAccount(accountInfo);
 
                 return Created("Client created", accountInfo);
 
@@ -101,25 +89,25 @@ namespace APITransferencias.Models
             }
         }
 
-        [HttpDelete("{id_cta}")]
-        public async Task<IActionResult> DeleteAccount(string id_cta)
-        {
-            try
-            {
-                if (id_cta == null)
-                {
-                    return BadRequest();
-                }
+        //[HttpDelete("{id_cta}")]
+        //public async Task<IActionResult> DeleteAccount(string id_cta)
+        //{
+        //    try
+        //    {
+        //        if (id_cta == null)
+        //        {
+        //            return BadRequest();
+        //        }
 
-                var newClient = await _accountRepository.deleteAccount(new Account { id_cta = id_cta });
+        //        var newClient = await _accountRepository.deleteAccount(new Account { num_cta = id_cta });
 
-                return NoContent();
+        //        return NoContent();
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error en el servicio: {ex.Message}.\n{ex.StackTrace}.");
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest($"Error en el servicio: {ex.Message}.\n{ex.StackTrace}.");
+        //    }
+        //}
     }
 }
